@@ -1,16 +1,11 @@
 const mongoose = require('mongoose');
 
-const listSchema = new mongoose.Schema({
+const folderSchema = new mongoose.Schema({
   title: { type: String, required: true },
-  boardId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Board',
-    required: true,
-  },
   userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
 });
 
-listSchema.set('toJSON', {
+folderSchema.set('toJSON', {
   transform: (doc, ret) => {
     ret.id = ret._id;
     delete ret._id;
@@ -19,6 +14,6 @@ listSchema.set('toJSON', {
   },
 });
 
-const List = mongoose.model('List', listSchema);
+const Folder = mongoose.model('Folder', folderSchema);
 
-module.exports = List;
+module.exports = Folder;

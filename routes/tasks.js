@@ -4,7 +4,10 @@ const Task = require('../schema/task');
 
 /* GET home page. */
 router.get('/', async function (req, res, next) {
-  const tasks = await Task.find();
+  const tasks = await Task.find({
+    userId: req.user.id,
+  });
+
   res.json(tasks);
 });
 
@@ -14,6 +17,7 @@ router.post('/', async function (req, res, next) {
     title: req.body.title,
     completed: false,
     listId: req.body.listId ? req.body.listId : 'general',
+    userId: req.user.id,
   };
   const newTaskModel = await Task.create(newTask);
   res.status(201).json(newTaskModel);
@@ -34,7 +38,8 @@ router.put('/update/:id', async function (req, res, next) {
   const updatedTask = await Task.findByIdAndUpdate(
     req.params.id,
     {
-      title: req.body.title,
+      title: req.body.title ? req.body.title : this.title,
+      listId: req.body.listId ? req.body.listId : this.listId,
     },
     { new: true }
   );

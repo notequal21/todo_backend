@@ -9,6 +9,10 @@ const connectDB = require('./config/db');
 var indexRouter = require('./routes/index');
 var listsRouter = require('./routes/lists');
 var tasksRouter = require('./routes/tasks');
+var userRouter = require('./routes/user');
+var authMiddleware = require('./middleware/auth');
+var boardsRouter = require('./routes/boards');
+var foldersRouter = require('./routes/folders');
 
 dotenv.config();
 connectDB();
@@ -28,8 +32,11 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/lists', listsRouter);
-app.use('/tasks', tasksRouter);
+app.use('/lists', authMiddleware, listsRouter);
+app.use('/tasks', authMiddleware, tasksRouter);
+app.use('/user', userRouter);
+app.use('/boards', authMiddleware, boardsRouter);
+app.use('/folders', authMiddleware, foldersRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

@@ -1,17 +1,16 @@
 const mongoose = require('mongoose');
 
-const taskSchema = new mongoose.Schema({
-  title: String,
-  completed: Boolean,
-  listId: {
-    type: mongoose.Schema.Types.Mixed,
-    ref: 'List',
+const boardSchema = new mongoose.Schema({
+  title: { type: String, required: true },
+  folderId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Folder',
     required: false,
   },
   userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
 });
 
-taskSchema.set('toJSON', {
+boardSchema.set('toJSON', {
   transform: (doc, ret) => {
     ret.id = ret._id;
     delete ret._id;
@@ -20,6 +19,6 @@ taskSchema.set('toJSON', {
   },
 });
 
-const Task = mongoose.model('Task', taskSchema);
+const Board = mongoose.model('Board', boardSchema);
 
-module.exports = Task;
+module.exports = Board;
